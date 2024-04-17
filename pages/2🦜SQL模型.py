@@ -74,7 +74,7 @@ with st.sidebar:
         ":bar_chart: Data:", datasets.keys(), index=index_no)
     chosen_model = st.selectbox(
         ':brain: Model:',
-        ['gpt-3.5-turbo', 'gpt-3.5-turbo-instruct', 'gpt-4'],
+        ['gpt-3.5-turbo', 'gpt-4'],
     )
     st.session_state["model"] = chosen_model
 
@@ -108,10 +108,12 @@ if prompt := st.chat_input():
     )
 
     with st.chat_message("assistant"):
-        st_cb = StreamlitCallbackHandler(
-            st.container(), expand_new_thoughts=False)
+        # st_cb = StreamlitCallbackHandler(
+        #     st.container(), expand_new_thoughts=False)
+        # response = pandas_df_agent.run(
+        #     st.session_state.messages, callbacks=[st_cb])
         response = pandas_df_agent.run(
-            st.session_state.messages, callbacks=[st_cb])
+            st.session_state.messages)
         st.session_state.messages.append(
             {"role": "assistant", "content": response})
         st.write(response)

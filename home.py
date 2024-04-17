@@ -1,11 +1,4 @@
-import plotly.express as px
-import altair as alt
 import pydeck as pdk
-import matplotlib.pyplot as plt
-import geopandas as gpd
-import transbigdata as tbd
-import re
-import numpy as np
 import pandas as pd
 import os
 import streamlit as st
@@ -67,7 +60,8 @@ def make_scattermap():
             bearing=0,
             max_zoom=16
         ),
-        # map_style='https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json',
+
+        map_style='https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json',
         layers=[
             pdk.Layer(
                 'ScatterplotLayer',

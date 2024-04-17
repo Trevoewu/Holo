@@ -2,6 +2,7 @@ from openai import OpenAI
 import streamlit as st
 import pandas as pd
 import openai
+
 from classes import get_primer, format_question, run_request
 st.set_page_config(page_title='可视化模型', page_icon='🧠')
 st.title("🧠可视化模型")
@@ -57,8 +58,7 @@ with st.sidebar:
         ":bar_chart: Data:", datasets.keys(), index=index_no)
     chosen_model = st.selectbox(
         ':brain: Model:',
-        ['CodeLlama-34b-Instruct-hf', 'gpt-3.5-turbo',
-            'gpt-3.5-turbo-instruct', 'gpt-4'],
+        ['CodeLlama-34b-Instruct-hf', 'gpt-3.5-turbo', 'gpt-4'],
     )
     st.session_state["model"] = chosen_model
 
@@ -94,7 +94,12 @@ if prompt := st.chat_input(''):
         # the answer is the completed Python script so add to the beginning of the script to it.
         answer = pimer_code + answer
         plot_area = st.empty()
-        plot_area.pyplot(exec(answer))
+        try:
+            plot_area.pyplot(exec(answer))
+        except Exception as e:
+            st.warning(e)
+            st.write(answer)
+        st.expander('Code', expanded=False).code(answer)
         st.session_state.messages.append(
             {"role": "assistant", "content": answer})
 

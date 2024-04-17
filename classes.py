@@ -1,9 +1,3 @@
-#################################################################################
-# Chat2VIS supporting functions
-# https://chat2vis.streamlit.app/
-# Paula Maddigan
-#################################################################################
-
 from langchain import HuggingFaceHub, LLMChain, PromptTemplate
 from openai import OpenAI
 
@@ -12,18 +6,9 @@ def run_request(question_to_ask, model_type, key, alt_key):
     if model_type == "gpt-4" or model_type == "gpt-3.5-turbo":
         client = OpenAI(api_key=key)
         # Run OpenAI ChatCompletion API
-        task = "Generate Python Code Script."
-        if model_type == "gpt-4":
-            # Ensure GPT-4 does not include additional comments
-            task = task + " The script should only include code, no comments."
+        task = "Generate Python Code Script.The script should only include plain code, no comments,no markdown."
         response = client.chat.completions.create(model=model_type,
                                                   messages=[{"role": "system", "content": task}, {"role": "user", "content": question_to_ask}])
-        llm_response = response.choices[0].message.content
-    elif model_type == "text-davinci-003" or model_type == "gpt-3.5-turbo-instruct":
-        # Run OpenAI Completion API
-        client = OpenAI(api_key=key)
-        response = client.chat.completions.create(engine=model_type, prompt=question_to_ask, temperature=0, max_tokens=500,
-                                                  top_p=1.0, frequency_penalty=0.0, presence_penalty=0.0, stop=["plt.show()"])
         llm_response = response.choices[0].message.content
     else:
         # Hugging Face model
@@ -88,7 +73,7 @@ def get_primer(df_dataset, df_name):
     primer_desc = primer_desc + "\nAdd a title. Set the fig suptitle as empty."
     primer_desc = primer_desc + "{}"  # Space for additional instructions if needed
     primer_desc = primer_desc + \
-        "\nUsing Python version 3.9.12, create a script using the dataframe df to graph the following: "
+        "\nUsing Python version 3.11.7, create a script using the dataframe df to graph the following: "
     pimer_code = "import pandas as pd\nimport matplotlib.pyplot as plt\n"
     pimer_code = pimer_code + "fig,ax = plt.subplots(1,1,figsize=(10,4))\n"
     pimer_code = pimer_code + \
