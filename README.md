@@ -1,14 +1,14 @@
 # Introduce
-这是我的本科毕设
+我的本科毕设
 # Get Start
-1. 项目依赖以下model：  
+1. 项目依赖以下库运行：  
 - pandas  
 - stramlit 
 - openai
 - langchain  
 - pydeck 
-- millify 
-允许项目前，请确保所有需要的模块都已经安装。在命令行中输入
+- millify  
+运行项目前，请确保所有需要的模块都已经安装。在命令行中输入
 ```shell
 pip3 install model_name 
 ```

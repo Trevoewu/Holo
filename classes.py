@@ -3,10 +3,10 @@ from openai import OpenAI
 
 
 def run_request(question_to_ask, model_type, key, alt_key):
-    if model_type == "gpt-4" or model_type == "gpt-3.5-turbo":
+    if model_type == "gpt-4" or model_type == "gpt-3.5-turbo" or model_type == 'gpt-4o':
         client = OpenAI(api_key=key)
         # Run OpenAI ChatCompletion API
-        task = "Generate Python Code Script.The script should only include plain code, no comments,no markdown."
+        task = "Generate Python Code Script.The script should only include plain code!!!, no comments,no markdown, do not user ```."
         response = client.chat.completions.create(model=model_type,
                                                   messages=[{"role": "system", "content": task}, {"role": "user", "content": question_to_ask}])
         llm_response = response.choices[0].message.content
@@ -71,7 +71,11 @@ def get_primer(df_dataset, df_name):
                 str(df_dataset.dtypes[i]) + " and contains numeric values. "
     primer_desc = primer_desc + "\nLabel the x and y axes appropriately."
     primer_desc = primer_desc + "\nAdd a title. Set the fig suptitle as empty."
-    primer_desc = primer_desc + "{}"  # Space for additional instructions if needed
+    # Space for additional instructions if needed
+    primer_desc = primer_desc + \
+        "The df is taxi OD data, which contains columns: id(vehicle number),stime,(start time),etime(end time),ID(order id) etc."
+    primer_desc = primer_desc + \
+        "Colmun `etime` and `stime` are string, you need convert them to datetime "
     primer_desc = primer_desc + \
         "\nUsing Python version 3.11.7, create a script using the dataframe df to graph the following: "
     pimer_code = "import pandas as pd\nimport matplotlib.pyplot as plt\n"

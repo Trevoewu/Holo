@@ -1,7 +1,7 @@
 from langchain.agents import AgentType
 from langchain_experimental.agents import create_pandas_dataframe_agent
-from langchain.callbacks import StreamlitCallbackHandler
-from langchain.chat_models import ChatOpenAI
+from langchain_community.callbacks import StreamlitCallbackHandler
+from langchain_community.chat_models import ChatOpenAI
 import streamlit as st
 import pandas as pd
 import os
@@ -23,15 +23,14 @@ file_formats = {
 if "datasets" not in st.session_state:
     datasets = {}
     # Preload datasets
-    datasets["Movies"] = pd.read_csv("static/movies.csv")
-    datasets["Housing"] = pd.read_csv("static/housing.csv")
-    datasets["Cars"] = pd.read_csv("static/cars.csv")
-    datasets["Colleges"] = pd.read_csv("static/colleges.csv")
-    datasets["Customers & Products"] = pd.read_csv(
-        "static/customers_and_products_contacts.csv")
-    datasets["Department Store"] = pd.read_csv("static/department_store.csv")
-    datasets["Energy Production"] = pd.read_csv("static/energy_production.csv")
-    st.session_state["datasets"] = datasets
+    datasets["Week1"] = pd.read_csv(
+        "static/1000taxidata/odddata/week1/oddata_20140803_train.txt")
+    datasets["Week2"] = pd.read_csv(
+        "static/1000taxidata/odddata/week2/oddata_20140810_train.txt")
+    datasets["Week3"] = pd.read_csv(
+        "static/1000taxidata/odddata/week3/oddata_20140818_train.txt")
+    datasets["Week4"] = pd.read_csv(
+        "static/1000taxidata/odddata/week4/oddata_20140824_train.txt")
 else:
     # use the list already loaded
     datasets = st.session_state["datasets"]
@@ -74,7 +73,7 @@ with st.sidebar:
         ":bar_chart: Data:", datasets.keys(), index=index_no)
     chosen_model = st.selectbox(
         ':brain: Model:',
-        ['gpt-3.5-turbo', 'gpt-4'],
+        ['gpt-4', 'gpt-3.5-turbo', 'gpt-4o'],
     )
     st.session_state["model"] = chosen_model
 
@@ -108,10 +107,10 @@ if prompt := st.chat_input():
     )
 
     with st.chat_message("assistant"):
-        # st_cb = StreamlitCallbackHandler(
-        #     st.container(), expand_new_thoughts=False)
-        # response = pandas_df_agent.run(
-        #     st.session_state.messages, callbacks=[st_cb])
+        st_cb = StreamlitCallbackHandler(
+            st.container(), expand_new_thoughts=False)
+        response = pandas_df_agent.run(
+            st.session_state.messages, callbacks=[st_cb])
         response = pandas_df_agent.run(
             st.session_state.messages)
         st.session_state.messages.append(

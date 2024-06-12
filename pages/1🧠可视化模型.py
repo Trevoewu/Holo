@@ -10,14 +10,14 @@ st.title("🧠可视化模型")
 if "datasets" not in st.session_state:
     datasets = {}
     # Preload datasets
-    datasets["Movies"] = pd.read_csv("static/movies.csv")
-    datasets["Housing"] = pd.read_csv("static/housing.csv")
-    datasets["Cars"] = pd.read_csv("static/cars.csv")
-    datasets["Colleges"] = pd.read_csv("static/colleges.csv")
-    datasets["Customers & Products"] = pd.read_csv(
-        "static/customers_and_products_contacts.csv")
-    datasets["Department Store"] = pd.read_csv("static/department_store.csv")
-    datasets["Energy Production"] = pd.read_csv("static/energy_production.csv")
+    datasets["Week1"] = pd.read_csv(
+        "static/1000taxidata/odddata/week1/oddata_20140803_train.txt")
+    datasets["Week2"] = pd.read_csv(
+        "static/1000taxidata/odddata/week2/oddata_20140810_train.txt")
+    datasets["Week3"] = pd.read_csv(
+        "static/1000taxidata/odddata/week3/oddata_20140818_train.txt")
+    datasets["Week4"] = pd.read_csv(
+        "static/1000taxidata/odddata/week4/oddata_20140824_train.txt")
     st.session_state["datasets"] = datasets
 else:
     # use the list already loaded
@@ -58,7 +58,7 @@ with st.sidebar:
         ":bar_chart: Data:", datasets.keys(), index=index_no)
     chosen_model = st.selectbox(
         ':brain: Model:',
-        ['CodeLlama-34b-Instruct-hf', 'gpt-3.5-turbo', 'gpt-4'],
+        ['gpt-4', 'gpt-3.5-turbo', 'gpt-4o', 'CodeLlama-34b-Instruct-hf'],
     )
     st.session_state["model"] = chosen_model
 
@@ -98,7 +98,7 @@ if prompt := st.chat_input(''):
             plot_area.pyplot(exec(answer))
         except Exception as e:
             st.warning(e)
-            st.write(answer)
+            # st.write(answer)
         st.expander('Code', expanded=False).code(answer)
         st.session_state.messages.append(
             {"role": "assistant", "content": answer})
